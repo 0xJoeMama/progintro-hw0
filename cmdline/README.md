@@ -53,6 +53,8 @@ program that would generate the man page on the spot and refresh the man databas
 Simple 'grep' search looking up the sequence "will find" in the file shakespeare.txt:
 
 ```sh
+$ ls
+shakespeare.txt
 $ grep "will find" shakespeare.txt
                 He that sweetest rose will find
     That draw his knives i' th' war. Well, I will find him;
@@ -88,4 +90,24 @@ that as the first argument to 'grep'.
 
 *PS: A somewhat cheaty way to do this, would be to search for _\*_ instead, since thats the pattern we've followed until now for the solutions and I doubt that '_' existed when Shakespeare was around:
 This gives a bunch of ACT_x SC_x results, our result and KING_HENRY_VIII|EPILOGUE. For more info on what _\*_ matches, go [here](https://en.wikipedia.org/wiki/Regular_expression)*
+
+## byte3
+Pretty straight-forward solution:
+
+```sh
+$ ls
+shakespeare.modified.txt  shakespeare.txt
+$ diff shakespeare.txt shakespeare.modified.txt
+11542c11542
+<     And all the men and women merely players;
+---
+>     And all the men and women merely programmers;
+```
+
+The file passed first is the first line. Therefore the old word was 'players'.
+The new old is 'programmers'(which makes logical sense, considering there couldn't be programmers in Shakespeare's works).
+
+Interesting thing is that using 'man' to see how diff works(specifically how it treats files passed into it),  
+I found the 'cmp' command, which finds the first byte that is different between two files. That might prove useful in the future.
+One could also generate a patch file by redirecting the output of diff to a file and then use that file with the 'patch' command to transform shakespeare.txt to the modified version.
 
