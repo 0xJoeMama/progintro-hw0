@@ -88,8 +88,8 @@ Since "find" does not exist, it would just error out and instead it would look u
 which results in beautiful stdout spam. We need to group the strings we are looking up into a single string and pass  
 that as the first argument to 'grep'.
 
-*PS: A somewhat cheaty way to do this, would be to search for _\*_ instead, since thats the pattern we've followed until now for the solutions and I doubt that '_' existed when Shakespeare was around:
-This gives a bunch of ACT_x SC_x results, our result and KING_HENRY_VIII|EPILOGUE. For more info on what _\*_ matches, go [here](https://en.wikipedia.org/wiki/Regular_expression)*
+*PS: A somewhat cheaty way to do this, would be to search for \_\*\_ instead, since thats the pattern we've followed until now for the solutions and I doubt that '_' existed when Shakespeare was around:
+This gives a bunch of ACT_x SC_x results, our result and KING_HENRY_VIII|EPILOGUE. For more info on what \_\*\_ matches, go [here](https://en.wikipedia.org/wiki/Regular_expression)*
 
 ## byte3
 Pretty straight-forward solution:
