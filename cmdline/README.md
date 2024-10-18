@@ -49,3 +49,43 @@ program that would generate the man page on the spot and refresh the man databas
 
 *PS: Love the references by the way.*
 
+## byte2
+Simple 'grep' search looking up the sequence "will find" in the file shakespeare.txt:
+
+```sh
+$ grep "will find" shakespeare.txt
+                He that sweetest rose will find
+    That draw his knives i' th' war. Well, I will find him;
+    If circumstances lead me, I will find
+    But I will find him when he lies asleep,
+    The Cardinal instantly will find employment,
+    In time will find their fit rewards. That seal
+    Cranmer will find a friend will not shrink from him.
+    If you do love me, you will find me out.
+    I will find you twenty lascivious turtles ere one chaste
+  FORD.  [Aside]  I will be patient; I will find out this.
+  THESEUS. She will find him by starlight. Here she comes; and her
+    when she is sated with his body, she will find the error of her
+    required conveniences, her delicate tenderness will find itself
+    Post you to London, and you will find it so;
+No one will find this: grep_is_your_friend
+  Fellow. I have a head, sir, that will find out logs
+    Can couch for fear but I will find them out;
+    will breed no terror in the youth: he will find it comes from a
+    The crown will find an heir. Great Alexander
+```
+
+Do note that the command:
+
+```sh
+$ grep will find shakespeare.txt
+```
+
+would not work, because it would look up the word "will" in the files "find" and "shakespeare.txt".
+Since "find" does not exist, it would just error out and instead it would look up "will" in Shakespeare's works,
+which results in beautiful stdout spam. We need to group the strings we are looking up into a single string and pass  
+that as the first argument to 'grep'.
+
+*PS: A somewhat cheaty way to do this, would be to search for _\*_ instead, since thats the pattern we've followed until now for the solutions and I doubt that '_' existed when Shakespeare was around:
+This gives a bunch of ACT_x SC_x results, our result and KING_HENRY_VIII|EPILOGUE. For more info on what _\*_ matches, go [here](https://en.wikipedia.org/wiki/Regular_expression)*
+
