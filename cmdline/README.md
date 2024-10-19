@@ -229,6 +229,7 @@ Usage: /tmp/joemama/byte5 <SDI>
 $ /tmp/joemama/byte5 <sdi-not-written-because-at-some-point-this-may-be-public> # rerun with proper arguments
 Here is your key: <not-written-for-the-same-reason>
 ```
+
 I was quite curious as to what this program was doing, so I also 'cat'-ed the byte5.c file.
 Turns out I was lucky I passed sdiNNNNNNN instead of just NNNNNNN because otherwise the program would just exit with failure.
 There is also a check that there is an active ssh client in the current shell, which of course I am using otherwise I couldn't have connected.
@@ -242,3 +243,59 @@ where
 * serverport is the default 22 SSH port
 
 The last 3 parts of the answer are given by the 'SSH\_CLIENT' environment variable, but with '.' and ' ' replaced by _
+
+## byte6
+Actually a really easy problem if we consider there are 2 ways of solving it.
+One way(probably the intended one) is to use the 'unzip' command as advised in the PDF.
+However assuming the same problem as before, the unzip command cannot possibly work in the cwd.
+Therefore I tried to use it on the /tmp/joemama directory I created before.
+
+```sh
+$ mkdir -p /tmp/joemama/ # just to make sure the server didn't restart while I was gone which would've emptied the tmp directory.
+$ unzip byte6.zip -d /tmp/joemama # -d to specify the output directory, otherwise cwd is used
+Archive:  byte6.zip
+error:  cannot create /tmp/joemama/byte6.txt
+        Permission denied
+```
+
+Well in that case, I can try something else.
+
+```sh
+$ unzip --help
+  Default action is to extract files in list, except those in xlist, to exdir;
+  file[.zip] may be a wildcard.  -Z => ZipInfo mode ("unzip -Z" for usage).
+
+  -p  extract files to pipe, no messages     -l  list files (short format)
+  -f  freshen existing files, create none    -t  test compressed archive data
+  -u  update files, create if necessary      -z  display archive comment only
+  -v  list verbosely/show version info       -T  timestamp archive to latest
+  -x  exclude files that follow (in xlist)   -d  extract files into exdir
+modifiers:
+  -n  never overwrite existing files         -q  quiet mode (-qq => quieter)
+  -o  overwrite files WITHOUT prompting      -a  auto-convert any text files
+  -j  junk paths (do not make directories)   -aa treat ALL files as text
+  -U  use escapes for all non-ASCII Unicode  -UU ignore any Unicode fields
+  -C  match filenames case-insensitively     -L  make (some) names lowercase
+  -X  restore UID/GID info                   -V  retain VMS version numbers
+  -K  keep setuid/setgid/tacky permissions   -M  pipe through "more" pager
+  -O CHARSET  specify a character encoding for DOS, Windows and OS/2 archives
+  -I CHARSET  specify a character encoding for UNIX and other archives
+```
+
+Seems like the -p option is perfect because it will just show the contents of the file on stdout.
+
+```sh
+$ unzip -p byte6.zip
+unzipping_was_never_so_easy
+```
+
+Well, it could be easier.
+
+
+As for the second solution: did you know that the newer versions of vim have built-in zip integration?
+
+```sh
+$ vim byte6.zip
+```
+just opens a vim file explorer inside the zip file from which one can just press Enter to instantly open the
+compressed byte6.txt file and view(but not overwrite) its contents ;).
