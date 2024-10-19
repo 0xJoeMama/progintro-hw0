@@ -111,3 +111,101 @@ Interesting thing is that using 'man' to see how diff works(specifically how it 
 I found the 'cmp' command, which finds the first byte that is different between two files. That might prove useful in the future.
 One could also generate a patch file by redirecting the output of diff to a file and then use that file with the 'patch' command to transform shakespeare.txt to the modified version.
 
+## byte4
+After entering the environment, using 'la' an alias for 'ls -a' I saw that there is a 'maze' folder.
+I tried using find and failed miserably.  
+There is a program that I have been using for years called 'fd', which is basically just a more modern version of 'find'.  
+The issue is, the search syntax for that program is completely different.
+Normally I would run something like: `fd cup.txt . --hidden`
+Trying the same with find, was not fun:
+
+```sh
+$ find cup.txt maze
+find: ‘cup.txt’: No such file or directory
+maze
+maze/right
+maze/right/right
+maze/right/right/5
+maze/right/right/5/box.txt
+maze/right/right/7
+maze/right/right/7/box.txt
+maze/right/right/3
+maze/right/right/3/box.txt
+...
+```
+
+"No such file or directory", meant that this is not the right syntax for 'find' and that  
+cup.txt was being passed in as a file.
+So now I needed to check for instructions for find.
+
+```sh
+$ find --help
+Usage: find [-H] [-L] [-P] [-Olevel] [-D debugopts] [path...] [expression]
+
+Default path is the current directory; default expression is -print.
+Expression may consist of: operators, options, tests, and actions.
+
+Operators (decreasing precedence; -and is implicit where no others are given):
+      ( EXPR )   ! EXPR   -not EXPR   EXPR1 -a EXPR2   EXPR1 -and EXPR2
+      EXPR1 -o EXPR2   EXPR1 -or EXPR2   EXPR1 , EXPR2
+
+Positional options (always true):
+      -daystart -follow -nowarn -regextype -warn
+
+Normal options (always true, specified before other expressions):
+      -depth -files0-from FILE -maxdepth LEVELS -mindepth LEVELS
+       -mount -noleaf -xdev -ignore_readdir_race -noignore_readdir_race
+
+Tests (N can be +N or -N or N):
+      -amin N -anewer FILE -atime N -cmin N -cnewer FILE -context CONTEXT
+      -ctime N -empty -false -fstype TYPE -gid N -group NAME -ilname PATTERN
+      -iname PATTERN -inum N -iwholename PATTERN -iregex PATTERN
+      -links N -lname PATTERN -mmin N -mtime N -name PATTERN -newer FILE
+      -nouser -nogroup -path PATTERN -perm [-/]MODE -regex PATTERN
+      -readable -writable -executable
+      -wholename PATTERN -size N[bcwkMG] -true -type [bcdpflsD] -uid N
+      -used N -user NAME -xtype [bcdpfls]
+
+Actions:
+      -delete -print0 -printf FORMAT -fprintf FILE FORMAT -print
+      -fprint0 FILE -fprint FILE -ls -fls FILE -prune -quit
+      -exec COMMAND ; -exec COMMAND {} + -ok COMMAND ;
+      -execdir COMMAND ; -execdir COMMAND {} + -okdir COMMAND ;
+
+Other common options:
+      --help                   display this help and exit
+      --version                output version information and exit
+
+Valid arguments for -D:
+exec, opt, rates, search, stat, time, tree, all, help
+Use '-D help' for a description of the options, or see find(1)
+
+Please see also the documentation at https://www.gnu.org/software/findutils/.
+You can report (and track progress on fixing) bugs in the "find"
+program via the GNU findutils bug-reporting page at
+https://savannah.gnu.org/bugs/?group=findutils or, if
+you have no web access, by sending email to <bug-findutils@gnu.org>.
+```
+
+Apparently 'find' works using a predicate-like system, where you can specify multiple criteria to match on.  
+Since we know the name of the file, we can use '-name'. It also looks like it runs on the cwd by default,
+therefore I can just use something like `find -name cup.txt` to get the path of the file.
+Then assuming at least one such file exists, I can just pipe it into cat. However, piping something into cat,
+just leads to it being printed. So the following commands, prints whatever was passed in to cat's stdin.
+
+```sh
+$ find -name cup.txt | cat
+./maze/left/right/8/cup.txt
+```
+
+This isn't that useful. So instead, I can use xargs, which turns stdin into arguments for the command passed into it.
+Thus we get something like:
+
+```sh
+$ find -name cup.txt | xargs cat
+you_just_found_the_triwizard_cup
+```
+
+and out comes our solution.
+
+*PS: Why so many references?*
