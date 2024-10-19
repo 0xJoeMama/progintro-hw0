@@ -209,3 +209,36 @@ you_just_found_the_triwizard_cup
 and out comes our solution.
 
 *PS: Why so many references?*
+
+## byte5
+After logging in, I first run 'la' and see that there is a C file in the byte5's home directory.
+I tried compiling it(while thinking that there is no chance it will work, because I assume others have also done this exercise, and thus an executable would already be here, if it was that easy) and sure enough,
+I get a permission error. I read the PDF and apparently /tmp/ has proper permissions for this. Thus I can just compile and run the C file there.
+After running I am given a usage error that request my SDI. I rerun, passing in my SDI(which in this case is omitted for obvious reasons):
+
+```sh
+$ la # list all files
+.bash_logout  .bashrc  .profile  byte5.c
+$ gcc -o byte5 byte5.c # try to compile in cwd and fail spectacularly
+/usr/bin/ld: cannot open output file byte5: Permission denied
+collect2: error: ld returned 1 exit status
+$ mkdir /tmp/joemama # make a new directory under /tmp/
+$ gcc -o /tmp/joemama/byte5 byte5.c
+$ /tmp/joemama/byte5 # run the program I just compiled
+Usage: /tmp/joemama/byte5 <SDI>
+$ /tmp/joemama/byte5 <sdi-not-written-because-at-some-point-this-may-be-public> # rerun with proper arguments
+Here is your key: <not-written-for-the-same-reason>
+```
+I was quite curious as to what this program was doing, so I also 'cat'-ed the byte5.c file.
+Turns out I was lucky I passed sdiNNNNNNN instead of just NNNNNNN because otherwise the program would just exit with failure.
+There is also a check that there is an active ssh client in the current shell, which of course I am using otherwise I couldn't have connected.
+Finally, the result I was given is actually of the format:
+sdiNNNNNNN\_epoch_\epoch * (NNNNNNN + 4)\_ip\_myport\_serverport
+where 
+* sdiNNNNNNN is the argument provided 
+* NNNNNNN is the numerican part of the argument provided, since that's how 'atoi' works
+* ip is the IPV4 address of the computer I am connecting to the server with
+* myport is the port I connected with(this one I am not that certain about but it seems to be the case)
+* serverport is the default 22 SSH port
+
+The last 3 parts of the answer are given by the 'SSH\_CLIENT' environment variable, but with '.' and ' ' replaced by _
