@@ -290,11 +290,36 @@ unzipping_was_never_so_easy
 
 Well, it could be easier.
 
-
 As for the second solution: did you know that the newer versions of vim have built-in zip integration?
 
 ```sh
 $ vim byte6.zip
 ```
-just opens a vim file explorer inside the zip file from which one can just press Enter to instantly open the
+
+just opens a netrw explorer inside the zip file from which one can just press Enter to instantly open the
 compressed byte6.txt file and view(but not overwrite) its contents ;).
+
+## byte7
+Following the same logic as I did for byte6, I needed to extract the contents of a tar file to stdout.
+Even though I use tars quite a lot I have never needed to do this before, so I had to search up the available options with 'man':
+
+
+```sh
+$ man tar
+```
+
+shows that the -O option extracts contents to stdout which is exactly the same as 'unzip''s -p option.
+With previous tar knowledge I can create the command.
+I need to e**x**tract to std**O**ut the contents of a g**z**ipped **f**ile called byte7.tar.gz.
+
+```sh
+$ tar xOzf byte7.tar.gz
+tar_jokes_dont_stick
+```
+
+and this way we get out answer.
+
+
+*PS: the vim solution from above also works here with `vim byte7.tar.gz`*
+
+
