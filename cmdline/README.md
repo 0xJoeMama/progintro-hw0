@@ -322,4 +322,32 @@ and this way we get out answer.
 
 *PS: the vim solution from above also works here with `vim byte7.tar.gz`*
 
+## byte8
+Re-trying the command given by the PDF gives the expected result:
+
+```sh
+$ cat carriage_return.txt
+There is absolutely nothing to see here. Move along.
+```
+
+if we open the file with vim(as advised by the PDF) however, things are different.
+
+```sh
+$ vim carriage_return.txt
+# inside the vim window
+no_more_secrets_from_you                                        ^MThere is absolutely nothing to see here. Move along.
+```
+
+the character ^M is actually a vim control sequence for \r. Thus we can see that what was actually happening,
+is that cat was printing the file, including the carriage return, which of course leads to the first part of the file being overwritten by the much larger second part.
+
+Alternatively, we can use the `strings` command to print ASCII string sequences from within the file:
+
+```sh
+$ strings carriage_return.txt
+ no_more_secrets_from_you
+There is absolutely nothing to see here. Move along.
+```
+
+*PS: how do I exit??? I'm stuck*
 
