@@ -1,7 +1,7 @@
 # cmdline Problems
 
 ## byte0
-Not that hard to solve. Just autocomplete like 5 million folders when 'cd'-ing.  
+cd into the deepest level.
 Though to be honest, the pokemon reference was funny. Didn't know byte0 was a man of culture
 
 Solution:
@@ -11,6 +11,7 @@ $ ls # to see the files in the current folder
 treasure
 $ cat treasure # print the contents of treasure
 ```
+*PS: after learning how find works we can use 'find i_wanna_be -type f | xargs cat'
 
 ## byte1
 "The output is not a manual page"...sure.
@@ -37,7 +38,6 @@ $ file /usr/bin/supercalifragilisticexpialidocious
 
 showed that the file being run is actually a bash script. This meant the content of the file was ASCII text,  
 therefore we could 'cat' it and it would actually show what is being run(though I was let down when I saw what was actually happening):
-
 
 ```sh
 $ cat /usr/bin/supercalifragilisticexpialidocious
@@ -245,7 +245,7 @@ where
 The last 3 parts of the answer are given by the 'SSH\_CLIENT' environment variable, but with '.' and ' ' replaced by _
 
 ## byte6
-Actually a really easy problem if we consider there are 2 ways of solving it.
+There are 2 ways of solving this problem.
 One way(probably the intended one) is to use the 'unzip' command as advised in the PDF.
 However assuming the same problem as before, the unzip command cannot possibly work in the cwd.
 Therefore I tried to use it on the /tmp/joemama directory I created before.
@@ -257,7 +257,6 @@ Archive:  byte6.zip
 error:  cannot create /tmp/joemama/byte6.txt
         Permission denied
 ```
-
 Well in that case, I can try something else.
 
 ```sh

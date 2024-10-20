@@ -9,8 +9,8 @@
 int main(void) {
   // Initialize 2 stack variables which we will be using throughout our whole
   // lifecycle, instead of reallocating on every repetition
-  int64_t left = 0;
-  int64_t right = 0;
+  int64_t left;
+  int64_t right;
 
   // loop as long as we are given data
   for (;;) {

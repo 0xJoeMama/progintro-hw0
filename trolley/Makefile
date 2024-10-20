@@ -1,14 +1,14 @@
 CC=gcc
-CFLAGS=-O0 -m32 -Wall -Wextra -Werror -pedantic 
+CFLAGS=-O0 -m32 -Wall -Wextra -Werror -pedantic
 BIN=trolley
 BUILDIR=.build
 
 all: $(BIN)
 
 $(BIN): $(BUILDIR)/trolley.o | $(BUILDIR)
-	$(CC) $(CFLAGS) -o $(BIN) $<
+	$(CC) $(CFLAGS) -o $(BIN) $^
 
-$(BUILDIR)/trolley.o: src/trolley.c | $(BUILDIR)
+$(BUILDIR)/%.o: src/%.c | $(BUILDIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(BUILDIR):
