@@ -411,8 +411,8 @@ $ la
 
 It seems we care about the 'names.txt' file. However there also seems to be an easter egg in here. Let's leave that for later.  
 
+### re:byte10
 We need to sort alphabetically and find the 10th name in the sorted file. For that we can use 'sort' with a combination of 'head' and 'tail':
-
 
 ```sh
 $ sort names.txt | head -n 10 | tail -n 1
@@ -442,3 +442,13 @@ $ tail -n 1 <file>
 
 returns the last line of a file. Again using '|' turns the stdout of head into the input for tail. This way we get the last name in the first 10 alphabetically sorted names aka the 10th name alphabetically.
 
+### i_wonder_what_this_does
+
+```sh
+$ file i_wonder_what_this_does # let's see what this easter egg is
+i_wonder_what_this_does: symbolic link to /usr/games/ninvaders
+```
+
+ninvaders? Alien invaders clone?
+After launching I spent enough time trying to win that I even found a cheat code.
+If you press capital H while playing, you can just add lives to yourself.
