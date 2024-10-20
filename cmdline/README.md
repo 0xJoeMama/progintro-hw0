@@ -11,7 +11,7 @@ $ ls # to see the files in the current folder
 treasure
 $ cat treasure # print the contents of treasure
 ```
-*PS: after learning how find works we can use 'find i_wanna_be -type f | xargs cat'
+*PS: after learning how find works we can use 'find i_wanna_be -type f | xargs cat'*
 
 ## byte1
 "The output is not a manual page"...sure.
