@@ -452,3 +452,45 @@ i_wonder_what_this_does: symbolic link to /usr/games/ninvaders
 ninvaders? Alien invaders clone?
 After launching I spent enough time trying to win that I even found a cheat code.
 If you press capital H while playing, you can just add lives to yourself.
+
+# byte11
+Again, log in, run 'la':
+
+```sh
+$ la
+.bash_logout  .bashrc  .profile  births.txt
+```
+
+We need to most common name. Okay.
+
+```sh
+$ sort births.txt
+... spam ...
+```
+
+sorts the names in alphabetical order. We need this because 'uniq' only works if equal lines are next to one another.
+
+```sh
+$ uniq -c <file>
+... spam ...
+```
+
+deduplicates equal lines of file and then append the number of said duplicated lines in front of the result line.
+We need the numbers because we care about the number of people called the same name.
+
+Finally:
+```sh
+$ sort -nr <file>
+... spam ...
+```
+sorts the lines in reverse numerical order. Again 'uniq -c' appends the count in the beginning of each line so we use that count to sort.
+By default this would sort in ascending order. Instead by specifying -r it sorts in descending order.
+
+We could stop there or we could use 'head' to get a clean result. Thus the following giga-command is formed:
+
+```sh
+$ sort births.txt | uniq -c | sort -nr | head -n 1
+    9 Kelley
+```
+
+And with that, the final command line challenge is done.
