@@ -401,4 +401,44 @@ This gives me flashbacks to when I made the mistake of creating a folder called 
 By mistake I tried `rm ~ -r`. By the time I realised what I had done, it was already too late. From that point on,  
 I aliased rm to `gio trash` which moves stuff to a 'Trash' folder which I can restore the files from in a worst case scenario.
 
+## byte10
+I log in and run 'la' to see all files in the home directory.
+
+```sh
+$ la
+.bash_logout  .bashrc  .profile  i_wonder_what_this_does  names.txt
+```
+
+It seems we care about the 'names.txt' file. However there also seems to be an easter egg in here. Let's leave that for later.  
+
+We need to sort alphabetically and find the 10th name in the sorted file. For that we can use 'sort' with a combination of 'head' and 'tail':
+
+
+```sh
+$ sort names.txt | head -n 10 | tail -n 1
+Adorne
+```
+
+and just like that we get our answer.
+A bit of an explanation:
+
+```sh
+$ sort names.txt
+```
+
+sorts the lines of the file alphabetically and spews the result into stdout.
+
+
+```sh
+$ head -n 10 <file>
+```
+
+returns the first 10 lines of a file(NOTE: that is the default behavior of head, but I like specifying it either way because I can never remember it).
+Using '|' turns the stdout of the previous command into the stdin of the new command. So head it just passed the sorted output as an input.
+
+```sh
+$ tail -n 1 <file>
+```
+
+returns the last line of a file. Again using '|' turns the stdout of head into the input for tail. This way we get the last name in the first 10 alphabetically sorted names aka the 10th name alphabetically.
 
