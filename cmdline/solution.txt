@@ -7,4 +7,5 @@ byte5: sdi2400168_1729322974_1700226224_95_164_180_76_47792_22
 byte6: unzipping_was_never_so_easy
 byte7: tar_jokes_dont_stick
 byte8: no_more_secrets_from_you
+byte9: filepaths_can_be_useful
 

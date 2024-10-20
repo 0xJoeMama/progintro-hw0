@@ -351,3 +351,54 @@ There is absolutely nothing to see here. Move along.
 
 *PS: how do I exit??? I'm stuck*
 
+## byte9
+After logging in and running 'ls' I see the following output:
+
+```sh
+$ ls
+-
+```
+
+This means that in the current folder there exists a directory or file that has the name '-'.
+To find it's nature, I use the 'file' command:
+
+```sh
+$ file ./-
+./-: ASCII text
+```
+
+Note that I had to use ./- instead of just -. That is needed because otherwise '-' refers to the stdin pipe in the terminal.
+That means a command like `-` would just hang and wait for input and then give this weird output:
+
+```sh
+$ file -
+-
+/dev/stdin: ASCII text
+$ file -
+./-
+/dev/stdin: ASCII text
+$ file -
+a
+/dev/stdin: ASCII text
+```
+To combat this we can just refer to the file with it's relative path.  
+
+Anyways, now we know the file is ASCII text, which means we can cat it(again keeping in mind we need to refer to the file with a relative path to avoid - being turned into the stdin pipe):
+
+```sh
+$ cat ./-
+filepaths_can_be_useful
+```
+
+Alternatively, we can use the redirect symbol. Since < is not actually a command but a terminal builtin, using - on it doesn't make it hang(at least that's my interpretation of it):
+
+```sh
+$ cat < -
+filepaths_can_be_useful
+```
+
+This gives me flashbacks to when I made the mistake of creating a folder called ~ in my home directory.
+By mistake I tried `rm ~ -r`. By the time I realised what I had done, it was already too late. From that point on,  
+I aliased rm to `gio trash` which moves stuff to a 'Trash' folder which I can restore the files from in a worst case scenario.
+
+
