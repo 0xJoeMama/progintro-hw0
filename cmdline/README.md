@@ -1,8 +1,13 @@
 # cmdline Problems
 
+## Overview
+This was a fun capture-the-flag challenge. Made me remember and learn a lot of commands that I wasn't using that often in the past.  
+I also think it was really good as an exercise to introduce someone to the linux system and the default commands available in it.
+Also a lot of funny references. In fact, some of them, reminded me of my childhood.
+
 ## byte0
 cd into the deepest level.
-Though to be honest, the pokemon reference was funny. Didn't know byte0 was a man of culture
+Though to be honest, the Pokemon reference was funny. Didn't know byte0 was a man of culture
 
 Solution:
 ```sh
@@ -88,7 +93,7 @@ Since "find" does not exist, it would just error out and instead it would look u
 which results in beautiful stdout spam. We need to group the strings we are looking up into a single string and pass  
 that as the first argument to 'grep'.
 
-*PS: A somewhat cheaty way to do this, would be to search for \_\*\_ instead, since thats the pattern we've followed until now for the solutions and I doubt that '_' existed when Shakespeare was around:
+*PS: A somewhat cheaty way to do this, would be to search for \_\*\_ instead, since that's the pattern we've followed until now for the solutions and I doubt that '_' existed when Shakespeare was around:
 This gives a bunch of ACT_x SC_x results, our result and KING_HENRY_VIII|EPILOGUE. For more info on what \_\*\_ matches, go [here](https://en.wikipedia.org/wiki/Regular_expression)*
 
 ## byte3
@@ -234,10 +239,11 @@ I was quite curious as to what this program was doing, so I also 'cat'-ed the by
 Turns out I was lucky I passed sdiNNNNNNN instead of just NNNNNNN because otherwise the program would just exit with failure.
 There is also a check that there is an active ssh client in the current shell, which of course I am using otherwise I couldn't have connected.
 Finally, the result I was given is actually of the format:
-sdiNNNNNNN\_epoch_\epoch * (NNNNNNN + 4)\_ip\_myport\_serverport
+sdiNNNNNNN\_epoch\_epoch * (NNNNNNN + 4)\_ip\_myport\_serverport
 where 
 * sdiNNNNNNN is the argument provided 
 * NNNNNNN is the numerican part of the argument provided, since that's how 'atoi' works
+* epoch is the time elapsed in seconds since the POSIX epoch
 * ip is the IPV4 address of the computer I am connecting to the server with
 * myport is the port I connected with(this one I am not that certain about but it seems to be the case)
 * serverport is the default 22 SSH port
@@ -303,7 +309,6 @@ compressed byte6.txt file and view(but not overwrite) its contents ;).
 Following the same logic as I did for byte6, I needed to extract the contents of a tar file to stdout.
 Even though I use tars quite a lot I have never needed to do this before, so I had to search up the available options with 'man':
 
-
 ```sh
 $ man tar
 ```
@@ -319,7 +324,6 @@ tar_jokes_dont_stick
 
 and this way we get out answer.
 
-
 *PS: the vim solution from above also works here with `vim byte7.tar.gz`*
 
 ## byte8
@@ -330,7 +334,7 @@ $ cat carriage_return.txt
 There is absolutely nothing to see here. Move along.
 ```
 
-if we open the file with vim(as advised by the PDF) however, things are different.
+If we open the file with vim(as advised by the PDF) however, things are different.
 
 ```sh
 $ vim carriage_return.txt
@@ -338,7 +342,7 @@ $ vim carriage_return.txt
 no_more_secrets_from_you                                        ^MThere is absolutely nothing to see here. Move along.
 ```
 
-the character ^M is actually a vim control sequence for \r. Thus we can see that what was actually happening,
+The character ^M is actually a vim control sequence for \r. Thus we can see that what was actually happening,
 is that cat was printing the file, including the carriage return, which of course leads to the first part of the file being overwritten by the much larger second part.
 
 Alternatively, we can use the `strings` command to print ASCII string sequences from within the file:
@@ -360,7 +364,7 @@ $ ls
 ```
 
 This means that in the current folder there exists a directory or file that has the name '-'.
-To find it's nature, I use the 'file' command:
+To find it's nature, I can use the 'file' command:
 
 ```sh
 $ file ./-
@@ -389,7 +393,6 @@ Anyways, now we know the file is ASCII text, which means we can cat it(again kee
 $ cat ./-
 filepaths_can_be_useful
 ```
-
 Alternatively, we can use the redirect symbol. Since < is not actually a command but a terminal builtin, using - on it doesn't make it hang(at least that's my interpretation of it):
 
 ```sh
@@ -409,7 +412,7 @@ $ la
 .bash_logout  .bashrc  .profile  i_wonder_what_this_does  names.txt
 ```
 
-It seems we care about the 'names.txt' file. However there also seems to be an easter egg in here. Let's leave that for later.  
+It seems we care about the 'names.txt' file. However there also seems to be an Easter egg in here. Let's leave that for later.  
 
 ### re:byte10
 We need to sort alphabetically and find the 10th name in the sorted file. For that we can use 'sort' with a combination of 'head' and 'tail':
@@ -434,7 +437,7 @@ $ head -n 10 <file>
 ```
 
 returns the first 10 lines of a file(NOTE: that is the default behavior of head, but I like specifying it either way because I can never remember it).
-Using '|' turns the stdout of the previous command into the stdin of the new command. So head it just passed the sorted output as an input.
+Using '|' turns the stdout of the previous command into the stdin of the new command. So head is just passed the sorted output as an input.
 
 ```sh
 $ tail -n 1 <file>
@@ -445,7 +448,7 @@ returns the last line of a file. Again using '|' turns the stdout of head into t
 ### i_wonder_what_this_does
 
 ```sh
-$ file i_wonder_what_this_does # let's see what this easter egg is
+$ file i_wonder_what_this_does # let's see what this Easter egg is
 i_wonder_what_this_does: symbolic link to /usr/games/ninvaders
 ```
 
@@ -475,8 +478,8 @@ $ uniq -c <file>
 ... spam ...
 ```
 
-deduplicates equal lines of file and then append the number of said duplicated lines in front of the result line.
-We need the numbers because we care about the number of people called the same name.
+deduplicates equal lines of file and then appends the number of said duplicated lines in front of the result line.
+That number in our case, is the number of people who were given the name of the line at birth.
 
 Finally:
 ```sh
@@ -493,4 +496,4 @@ $ sort births.txt | uniq -c | sort -nr | head -n 1
     9 Kelley
 ```
 
-And with that, the final command line challenge is done.
+And with that, the final command line challenge is done
