@@ -18,7 +18,7 @@ int main(void) {
     printf("Enter the cost of going left: ");
 
     // if left is EOF terminate successfully
-    if (scanf("%" PRId64, &left) == EOF)
+    if (scanf("%" SCNd64, &left) == EOF)
       break;
 
     // if left is out of bounds, terminate with status code 1
@@ -27,7 +27,7 @@ int main(void) {
 
     // User input for right
     printf("Enter the cost of going right: ");
-    if (scanf("%" PRId64, &right) == EOF) {
+    if (scanf("%" SCNd64, &right) == EOF) {
       // if not right cost is provided, we exit unsuccessfully
       printf("No right cost provided\n");
       return 1;
