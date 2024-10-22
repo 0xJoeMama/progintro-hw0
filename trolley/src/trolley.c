@@ -11,7 +11,8 @@ static bool out_of_bounds(int64_t x) { return x > MAX_NUM || x < -MAX_NUM; }
 
 static void notify_for_oob(int64_t x) {
   fprintf(stderr,
-          "specified value %" PRId64 " is outside the range [-10^18, 10^18]\n", x);
+          "specified value %" PRId64 " is outside the range [-10^18, 10^18]\n",
+          x);
 }
 
 int main(void) {
@@ -19,6 +20,7 @@ int main(void) {
   // lifecycle, instead of reallocating on every repetition
   int64_t left;
   int64_t right;
+  size_t n;
 
   // loop as long as we are given data
   for (;;) {
@@ -26,8 +28,14 @@ int main(void) {
     printf("Enter the cost of going left: ");
 
     // if left is EOF terminate successfully
-    if (scanf("%" SCNd64, &left) == EOF)
-      break;
+    switch (n = scanf("%" SCNd64, &left)) {
+    case EOF:
+      printf("Terminating.\n");
+      return 0;
+    case 0:
+      fprintf(stderr, "not a number\n");
+      return 1;
+    }
 
     // if left is out of bounds, terminate with status code 1 and let the user
     // know
@@ -38,9 +46,12 @@ int main(void) {
 
     // User input for right
     printf("Enter the cost of going right: ");
-    if (scanf("%" SCNd64, &right) == EOF) {
-      // if not right cost is provided, we exit unsuccessfully
-      printf("No right cost provided\n");
+    switch (n = scanf("%" SCNd64, &right)) {
+    case EOF:
+      printf("No right cost provided.\n");
+      return 1;
+    case 0:
+      fprintf(stderr, "not a number\n");
       return 1;
     }
 
