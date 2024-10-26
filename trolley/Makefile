@@ -3,7 +3,7 @@ CFLAGS=-O0 -m32 -Wall -Wextra -Werror -pedantic -std=c99
 BIN=trolley
 BUILDIR=.build
 
-all: $(BIN) bench
+all: $(BIN)
 
 $(BIN): $(BUILDIR)/trolley.o | $(BUILDIR)
 	$(CC) $(CFLAGS) -o $(BIN) $^
@@ -18,5 +18,5 @@ clean:
 	rm -r $(BUILDIR) $(BIN)
 
 bench:
-	  time shuf -i 0-1000000000000000000 -n 20000 | $(PWD)/$(BIN)
+	time $(PWD)/$(BIN) < $(PWD)/trolley.txt
 
