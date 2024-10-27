@@ -173,3 +173,19 @@ Otherwise, we go right.
 Pretty simple.
 
 ## Benchmarking
+Using a tool called [hyperfine](https://github.com/sharkdp/hyperfine) I am able to benchmark the program.
+Over 1000 iterations of execution, using the [trolley.txt](./trolley.txt) file provided to us as test input,
+I was able to get the following results:
+```sh
+Benchmark 1: ./trolley < ./trolley.txt
+  Time (mean ± σ):       7.5 ms ±   1.1 ms    [User: 6.3 ms, System: 0.5 ms]
+  Range (min … max):     6.3 ms …  17.6 ms    1000 runs
+```
+
+Our average time is 7.5ms plus or minus 1.1ms which for a program that uses stdin/stdout extensively is actually really good.
+Note: This was run on DI's Linux computers, which I have noticed have quite unstable program runtimes. As a matter of fact, I've seen execution times from 15ms to 6ms.
+This is probably something that was to do with the large(TM) amount of background vscode-server processes running on the equipment(about 5 per computer at the time of testing).
+It is also the case that computers with more active users also have a slower runtime, which also makes sense.
+
+This does make me quite curious as to how our programs are gonna be benchmarked.  
+To me it seems like it can be affected by the background processes quite a lot, which considering the testing is gonna be in such an unstable environment leads me to question the accuracy of the results.

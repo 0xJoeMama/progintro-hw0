@@ -21,21 +21,21 @@ int main(void) {
     // User input for right
     printf("Enter the cost of going right: ");
     if (scanf("%" SCNd64, &right) != 1) {
-      printf("No right cost provided.\n");
+      puts("No right cost provided.");
       return 1;
     }
 
     // if right is greater than or equal to left, we go left.
     // otherwise we go right
     if (left <= right) {
-      printf("Go left\n");
+      puts("Go left");
     } else {
-      printf("Go right\n");
+      puts("Go right");
     }
   }
 
   // print the message shown in the test cases
-  printf("Terminating.\n");
+  puts("Terminating.");
 
   // successful execution
   return 0;
