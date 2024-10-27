@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-O0 -m32 -Wall -Wextra -Werror -pedantic -std=c99
 BIN=trolley
-BUILDIR=.build
+BUILDIR=build
 
 all: $(BIN)
 

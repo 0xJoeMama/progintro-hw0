@@ -1,5 +1,4 @@
 #include <inttypes.h>
-#include <stdbool.h>
 #include <stdio.h>
 
 // 10^18 is just hardcoded because I wouldn't wanna repeat this long thing like
@@ -16,7 +15,8 @@ int main(void) {
     printf("Enter the cost of going left: ");
 
     // if left is EOF terminate successfully
-    if (scanf("%" SCNd64, &left) != 1) break;
+    if (scanf("%" SCNd64, &left) != 1) 
+      break;
 
     // User input for right
     printf("Enter the cost of going right: ");

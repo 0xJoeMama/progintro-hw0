@@ -41,7 +41,6 @@ Therefore the following came to be:
 for (;;) {
   // ...
 }
-
 ```
 
 ### The Input
@@ -90,7 +89,7 @@ Now to process the input:
 
 ```c
 // if left is EOF terminate successfully
-if (scanf("%" SCNd64, &left) == EOF)
+if (scanf("%" SCNd64, &left) != 1)
   break;
 ```
 the above code, exits the program's main loop while the message printing and returning 0 is handled by the main function:
@@ -103,18 +102,24 @@ printf("Terminating.\n");
 return 0;
 ```
 
-- if EOF is reached while we are asking for the right input, we exit unsuccessfully printing the message from the provided examples:
+- if EOF is reached or no match can be made while we are asking for the right input, we exit unsuccessfully printing the message from the provided examples:
 
 ```c
-if (scanf("%" SCNd64, &right) == EOF) {
+if (scanf("%" SCNd64, &right) != 1) {
     // if not right cost is provided, we exit unsuccessfully
     printf("No right cost provided\n");
     return 1;
 }
 ```
+*NOTE: I use != 1 instead of != EOF in order to also make sure at least one item is matched. This ensures that if we get a matching failure
+(which would happen in the user entered "hello" instead of a valid decimal integer) the program also exits.
+Technically speaking that would also not be needed according to instructor feedback, but seeing that != EOF and == 1 generate the same amount of instructions, I say we can handle the case normally.*
 
-- if any of the provided numbers are outside the program's specified input range, we exit unsuccessfully.
-To do that we use the 'out\_of\_bounds' function which is implemented as follows:
+~~- if any of the provided numbers are outside the program's specified input range, we exit unsuccessfully.
+To do that we use the 'out\_of\_bounds' function which is implemented as follows:~~
+- The above is actually not needed according to piazza feedback from our instructor.
+However, I would argue that under normal execution circumstances, it is required we make sure that we get valid input.
+In favor of speed however, if we are guaranteed to get valid input we can ignore the branching to separate functions and the jumps in the main function.
 
 ```c
 // 10^18 is just hardcoded because I wouldn't wanna repeat this long thing like
@@ -168,20 +173,3 @@ Otherwise, we go right.
 Pretty simple.
 
 ## Benchmarking
-In the end the program is working. The real question is: does it match the performance criteria provided?
-Now, we need to generate inputs. For 10000 executions we need 20000 numbers. I ain't writing that by hand.
-We can use a shell command instead. A benchmark is included in the default build process.
-
-```sh
-$ make bench
-  # ...
-  Enter the cost of going left: Enter the cost of going right: Go left                                                                                                                                                                         
-  Enter the cost of going left: Enter the cost of going right: Go left                                                                                                                                                                         
-  Enter the cost of going left: Enter the cost of going right: Go right                                                                                                                                                                        
-  Enter the cost of going left: Terminating.                                                                                                                                                                                                   
-                                                                                                                                                                                                                                               
-  real    0m0.110s                                                                                                                                                                                                                             
-  user    0m0.027s                                                                                                                                                                                                                             
-  sys     0m0.000s         
-```
-Even with the inaccurate benchmark, we are still way below the threshold of a second.
