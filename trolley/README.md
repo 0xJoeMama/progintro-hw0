@@ -54,12 +54,12 @@ We now need to get user input from stdin.
 Next, the integers we read. Notice that the specification mentions that the input can be anywhere from $-10^18$ to $10^18$.
 Given that, we need to find the size of integer we should allocate to cover the whole input range.
 The range $[-10^18, 10^18]$, contains:
-* 10^18 negatives
-* 10^18 positives
-* 0
-That means our numbers have $2\*10^18 + 1$ discrete states.
+* $10^18$ negatives
+* $10^18$ positives
+* $0$
+That means our numbers have $2*10^18 + 1$ discrete states.
 To store and distinguish between that many numbers we need an integer of size:
-$D = log2(2\*10^18 + 1) \approx 60.8 bits$
+$D = \log_{2}(2*10^18 + 1) \approx 60.8 bits$
 Therefore we need a 64-bit integer type to hold this large a number.
 
 Now, to specifically allocate 64-bit signed-integers I use the `int64_t` type. The reason for that is because we cannot rely on a `long long` to be 64-bit, since it's system specific.
@@ -84,36 +84,10 @@ which is the C standard compliant way of printing the `intxx_t` types.
 That is how the specific commands for reading input where chosen.
 
 ### Input Handling
-Now to process the input and act accordingly, I make use of a custom macro called `read_input`.
-This macro takes in a local variable which will be the one that will be read from `stdin`, a message to print and a return value to exit with from the main function when EOF is reached.
-This was originally inlined into the main function, however it lead to repetitive code so I thought it would be a better idea to abstract it away into a macro.
-I chose not to use a function as that would lead to a slight performance problem which would be caused by the stack manipulation needed to enter and exit a function.
-Since our solutions are graded for performance it's a better idea to do it this way.
-
-```c
-// using a macro as an inline function to avoid repeating code
-#define tr_read_and_handle_input(number, message, eof_ret)                     \
-  {                                                                            \
-    switch (scanf("%" SCNd64, &number)) {                                      \
-    case -1:                                                                   \
-      printf(message "\n");                                                    \
-      return eof_ret;                                                          \
-    case 0:                                                                    \
-      fprintf(stderr, "not a number: ");                                       \
-      int c;                                                                   \
-      while ((c = fgetc(stdin)) != '\n' && c != EOF)                           \
-        fputc(c, stderr);                                                      \
-                                                                               \
-      fputc('\n', stderr);                                                     \
-      return 1;                                                                \
-    }                                                                          \
-  }
-```
-As seen above, this reads a 64-bit integer from `stdin`, using the `scanf` function.
-Using a switch statement, we can then handle invalid cases separately. According to the man page for scanf:
-* if scanf returns `EOF`, it means end of file has been reached without a match occuring. Thus we need to print the message given to us by the specification("Terminating." and "No right cost provided.") and exit with the correct exit code (0 for left EOF, 1 for right).
-* if scanf returns 0, it means a matching failure has happened. This means the user provided something that could not be parsed as an integer. So we let the user know using the `stderr` stream and a message showing the invalid input.
-* otherwise scanf has returned at least 1 which means we have valid input
+To handle possible input errors the following strategy has been chosen: if scanf returns anything but one, we assume EOF. This way we follow the spec and if a matching failure occurs, we can still exit.
+My final submission will use the strategy described above and will be [here](./src/trolley.c).
+However, I think it's important to handle all user errors in programming so that's why I created the [new version](./src/trolley_new.c) which handles all possible error cases with proper messages 
+and would be much closer to what I would actually like to ship to a user.
 
 ### The Logic
 Finally the actual logic:
