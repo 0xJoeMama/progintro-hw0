@@ -58,7 +58,7 @@ The range $$[-10^{18}, 10^{18}]$$, contains:
 * $$10^{18}$$ positives
 * $$0$$  
 
-That means our numbers have $$2\*10^18 + 1$$ discrete states.
+That means our numbers have $$2\*10^{18} + 1$$ discrete states.
 To store and distinguish between that many numbers we need an integer of size:
 $$D = \log_{2}(2\*10^{18} + 1) \approx 60.8 bits$$
 Therefore we need a 64-bit integer type to hold this large a number.
