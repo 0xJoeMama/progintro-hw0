@@ -45,24 +45,24 @@ for (;;) {
 
 ### The Input
 We now need to get user input from stdin.
-scanf was chosen because it offers the following advantages:
+`scanf` was chosen because it offers the following advantages:
 - It automatically parses input in a specified format. In this case, we can read integers and not have to worry about atoi or strtol.
 - It returns EOF when EOF is reached, meaning we can easily handle it.
 - It ignores whitespace(space, tab and enter) which we need since the specification asks for it.
 - It does not need any buffers to be manually allocated or freed by us.
 
-Next, the integers we read. Notice that the specification mentions that the input can be anywhere from -10^18 to 10^18.
+Next, the integers we read. Notice that the specification mentions that the input can be anywhere from $-10^18$ to $10^18$.
 Given that, we need to find the size of integer we should allocate to cover the whole input range.
-The range [-10^18, 10^18], contains:
+The range $[-10^18, 10^18]$, contains:
 * 10^18 negatives
 * 10^18 positives
 * 0
-That means our numbers have 2\*10^18 + 1 discrete states.
+That means our numbers have $2\*10^18 + 1$ discrete states.
 To store and distinguish between that many numbers we need an integer of size:
-D = log2(2\*10^18 + 1) ≈ 60.8 bits
+$D = log2(2\*10^18 + 1) \approx 60.8 bits$
 Therefore we need a 64-bit integer type to hold this large a number.
 
-Now, to specifically allocate 64-bit signed-integers I use the int64\_t type. The reason for that is because we cannot rely on a long long to be 64-bit, since it's system specific.
+Now, to specifically allocate 64-bit signed-integers I use the `int64_t` type. The reason for that is because we cannot rely on a `long long` to be 64-bit, since it's system specific.
 Therefore we use an integer with a set size that is guaranteed by the C standard to be the size we need.
 
 ```c
@@ -73,86 +73,47 @@ int64_t right;
 ```
 
 Note that we allocate 2 variables for all of the program's lifetime. This is technically speaking better than allocating a new set of variables on every  
-iteration of the loop, but then again moving the stack pointer isn't that hard for today's machines.
+iteration of the loop, but then again moving the stack pointer isn't that hard for today's machines and the compiler might be able to make that optimization on its own.
 
-For the scanning, we also cannot use a format specifier like `%lld` because nothing guarantees that int64\_t is gonna be a long long. Thus we need to use the following:
+For the scanning, we also cannot use a format specifier like `%lld` because nothing guarantees that `int64_t` is gonna be a long long. Thus we need to use the following:
 ```c
 "%" SCNd64
 ```
-which is the C standard compliant way of printing the intxx\_t types.
+which is the C standard compliant way of printing the `intxx_t` types.
 
 That is how the specific commands for reading input where chosen.
 
 ### Input Handling
-Now to process the input:
-- if EOF is reached when we are asking for the left input, we need to terminate gracefully.
+Now to process the input and act accordingly, I make use of a custom macro called `read_input`.
+This macro takes in a local variable which will be the one that will be read from `stdin`, a message to print and a return value to exit with from the main function when EOF is reached.
+This was originally inlined into the main function, however it lead to repetitive code so I thought it would be a better idea to abstract it away into a macro.
+I chose not to use a function as that would lead to a slight performance problem which would be caused by the stack manipulation needed to enter and exit a function.
+Since our solutions are graded for performance it's a better idea to do it this way.
 
 ```c
-// if left is EOF terminate successfully
-if (scanf("%" SCNd64, &left) != 1)
-  break;
+// using a macro as an inline function to avoid repeating code
+#define tr_read_and_handle_input(number, message, eof_ret)                     \
+  {                                                                            \
+    switch (scanf("%" SCNd64, &number)) {                                      \
+    case -1:                                                                   \
+      printf(message "\n");                                                    \
+      return eof_ret;                                                          \
+    case 0:                                                                    \
+      fprintf(stderr, "not a number: ");                                       \
+      int c;                                                                   \
+      while ((c = fgetc(stdin)) != '\n' && c != EOF)                           \
+        fputc(c, stderr);                                                      \
+                                                                               \
+      fputc('\n', stderr);                                                     \
+      return 1;                                                                \
+    }                                                                          \
+  }
 ```
-the above code, exits the program's main loop while the message printing and returning 0 is handled by the main function:
-
-```c
-// print the message shown in the test cases
-printf("Terminating.\n");
-
-// successful execution
-return 0;
-```
-
-- if EOF is reached or no match can be made while we are asking for the right input, we exit unsuccessfully printing the message from the provided examples:
-
-```c
-if (scanf("%" SCNd64, &right) != 1) {
-    // if not right cost is provided, we exit unsuccessfully
-    printf("No right cost provided\n");
-    return 1;
-}
-```
-*NOTE: I use != 1 instead of != EOF in order to also make sure at least one item is matched. This ensures that if we get a matching failure
-(which would happen in the user entered "hello" instead of a valid decimal integer) the program also exits.
-Technically speaking that would also not be needed according to instructor feedback, but seeing that != EOF and == 1 generate the same amount of instructions, I say we can handle the case normally.*
-
-~~- if any of the provided numbers are outside the program's specified input range, we exit unsuccessfully.
-To do that we use the 'out\_of\_bounds' function which is implemented as follows:~~
-- The above is actually not needed according to piazza feedback from our instructor.
-However, I would argue that under normal execution circumstances, it is required we make sure that we get valid input.
-In favor of speed however, if we are guaranteed to get valid input we can ignore the branching to separate functions and the jumps in the main function.
-
-```c
-// 10^18 is just hardcoded because I wouldn't wanna repeat this long thing like
-// 4 times
-#define MAX_NUM 1000000000000000000
-
-// check if number x is within the range of valid inputs
-static bool out_of_bounds(int64_t x) { return x > MAX_NUM || x < -MAX_NUM; }
-```
-
-Futhermore, we use the following function to let the user know they made a mistake:
-
-```c
-static void notify_for_oob(int64_t x) {
-  fprintf(stderr,
-          "specified value %" PRId64 " is outside the range [-10^18, 10^18]\n", x);
-}
-```
-
-All of that is put together in the main loop using the following code:
-
-
-```c
-// if left is out of bounds, terminate with status code 1 and let the user know 
-if (out_of_bounds(left)) {
-    notify_for_oob(left);
-    return 1;
-}
-```
-Note that I didn't really like the idea of abstracting these 2 functions out. The reason for that is because this is too small a program with a small number of use cases for said functions.
-Usually I implement utility functions when I get to using the same logic more than 2 times. But because I am not sure how this will be graded, I decided to just abstract them away just in case.
-
-PS: the static modifier makes a function local to the current translation unit. Its usage is intentional.
+As seen above, this reads a 64-bit integer from `stdin`, using the `scanf` function.
+Using a switch statement, we can then handle invalid cases separately. According to the man page for scanf:
+* if scanf returns `EOF`, it means end of file has been reached without a match occuring. Thus we need to print the message given to us by the specification("Terminating." and "No right cost provided.") and exit with the correct exit code (0 for left EOF, 1 for right).
+* if scanf returns 0, it means a matching failure has happened. This means the user provided something that could not be parsed as an integer. So we let the user know using the `stderr` stream and a message showing the invalid input.
+* otherwise scanf has returned at least 1 which means we have valid input
 
 ### The Logic
 Finally the actual logic:
