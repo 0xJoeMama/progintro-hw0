@@ -51,15 +51,16 @@ We now need to get user input from stdin.
 - It ignores whitespace(space, tab and enter) which we need since the specification asks for it.
 - It does not need any buffers to be manually allocated or freed by us.
 
-Next, the integers we read. Notice that the specification mentions that the input can be anywhere from $$-10^18$$ to $$10^18$$.
+Next, the integers we read. Notice that the specification mentions that the input can be anywhere from $$-10^{18}$$ to $$10^{18}$$.
 Given that, we need to find the size of integer we should allocate to cover the whole input range.
-The range $$[-10^18, 10^18]$$, contains:
-* $$10^18$$ negatives
-* $$10^18$$ positives
-* $$0$$
-That means our numbers have $$2*10^18 + 1$$ discrete states.
+The range $$[-10^{18}, 10^{18}]$$, contains:
+* $$10^{18}$$ negatives
+* $$10^{18}$$ positives
+* $$0$$  
+
+That means our numbers have $$2\*10^18 + 1$$ discrete states.
 To store and distinguish between that many numbers we need an integer of size:
-$$D = \log_{2}(2*10^18 + 1) \approx 60.8 bits$$
+$$D = \log_{2}(2\*10^{18} + 1) \approx 60.8 bits$$
 Therefore we need a 64-bit integer type to hold this large a number.
 
 Now, to specifically allocate 64-bit signed-integers I use the `int64_t` type. The reason for that is because we cannot rely on a `long long` to be 64-bit, since it's system specific.
