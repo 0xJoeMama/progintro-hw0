@@ -5,7 +5,7 @@ It is important we keep in mind the specifications given to us, specifically whe
 
 ## Build Instructions
 
-To build this project, you need to make GNU Make, a C compiler(gcc by default) and an implementation of libc installed on your system.
+To build this project, you need to GNU Make, a C compiler(gcc by default) and an implementation of libc installed on your system.
 
 To build using Make and gcc you can run:
 ```sh
@@ -76,7 +76,7 @@ int64_t right;
 Note that we allocate 2 variables for all of the program's lifetime. This is technically speaking better than allocating a new set of variables on every  
 iteration of the loop, but then again moving the stack pointer isn't that hard for today's machines and the compiler might be able to make that optimization on its own.
 
-For the scanning, we also cannot use a format specifier like `%lld` because nothing guarantees that `int64_t` is gonna be a long long. Thus we need to use the following:
+For the scanning, we also cannot use a format specifier like `%lld` because nothing guarantees that `int64_t` is gonna be a `long long`. Thus we need to use the following:
 ```c
 "%" SCNd64
 ```
