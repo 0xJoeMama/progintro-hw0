@@ -2,11 +2,11 @@
 
 ## Overview
 This was a fun capture-the-flag challenge. Made me remember and learn a lot of commands that I wasn't using that often in the past.  
-I also think it was really good as an exercise to introduce someone to the linux system and the default commands available in it.
-Also a lot of funny references. In fact, some of them, reminded me of my childhood.
+I also think it was really good as an exercise to introduce someone to the GNU/Linux system and workflow as well as the default commands available in it.
+It also contained a lot of funny references. In fact, some of them, reminded me of my childhood.
 
 ## byte0
-cd into the deepest level.
+`cd` into the deepest level.
 Though to be honest, the Pokemon reference was funny. Didn't know byte0 was a man of culture
 
 Solution:
@@ -42,7 +42,7 @@ $ file /usr/bin/supercalifragilisticexpialidocious
 ```
 
 showed that the file being run is actually a bash script. This meant the content of the file was ASCII text,  
-therefore we could 'cat' it and it would actually show what is being run(though I was let down when I saw what was actually happening):
+therefore we could `cat` it and it would actually show what is being run(though I was let down when I saw what was actually happening):
 
 ```sh
 $ cat /usr/bin/supercalifragilisticexpialidocious
@@ -110,16 +110,16 @@ $ diff shakespeare.txt shakespeare.modified.txt
 ```
 
 The file passed first is the first line. Therefore the old word was 'players'.
-The new old is 'programmers'(which makes logical sense, considering there couldn't be programmers in Shakespeare's works).
+The new wor is 'programmers'(which makes logical sense, considering there couldn't be programmers in Shakespeare's works).
 
-Interesting thing is that using 'man' to see how diff works(specifically how it treats files passed into it),  
+Interesting thing is that using `man` to see how diff works(specifically how it treats files passed into it),  
 I found the 'cmp' command, which finds the first byte that is different between two files. That might prove useful in the future.
 One could also generate a patch file by redirecting the output of diff to a file and then use that file with the 'patch' command to transform shakespeare.txt to the modified version.
 
 ## byte4
-After entering the environment, using 'la' an alias for 'ls -a' I saw that there is a 'maze' folder.
+After entering the environment, using `la` an alias for `ls -a`, I saw that there is a 'maze' folder.
 I tried using find and failed miserably.  
-There is a program that I have been using for years called 'fd', which is basically just a more modern version of 'find'.  
+There is a program that I have been using for years called `fd`, which is basically just a more modern version of `find`.  
 The issue is, the search syntax for that program is completely different.
 Normally I would run something like: `fd cup.txt . --hidden`
 Trying the same with find, was not fun:
@@ -139,7 +139,7 @@ maze/right/right/3/box.txt
 ...
 ```
 
-"No such file or directory", meant that this is not the right syntax for 'find' and that  
+"No such file or directory", meant that this is not the right syntax for `find` and that  
 cup.txt was being passed in as a file.
 So now I needed to check for instructions for find.
 
@@ -192,8 +192,8 @@ https://savannah.gnu.org/bugs/?group=findutils or, if
 you have no web access, by sending email to <bug-findutils@gnu.org>.
 ```
 
-Apparently 'find' works using a predicate-like system, where you can specify multiple criteria to match on.  
-Since we know the name of the file, we can use '-name'. It also looks like it runs on the cwd by default,
+Apparently `find` works using a predicate-like system, where you can specify multiple criteria to match on.  
+Since we know the name of the file, we can use `-name`. It also looks like it runs on the cwd by default,
 therefore I can just use something like `find -name cup.txt` to get the path of the file.
 Then assuming at least one such file exists, I can just pipe it into cat. However, piping something into cat,
 just leads to it being printed. So the following commands, prints whatever was passed in to cat's stdin.
@@ -216,7 +216,7 @@ and out comes our solution.
 *PS: Why so many references?*
 
 ## byte5
-After logging in, I first run 'la' and see that there is a C file in the byte5's home directory.
+After logging in, I first run `la` and see that there is a C file in the byte5's home directory.
 I tried compiling it(while thinking that there is no chance it will work, because I assume others have also done this exercise, and thus an executable would already be here, if it was that easy) and sure enough,
 I get a permission error. I read the PDF and apparently /tmp/ has proper permissions for this. Thus I can just compile and run the C file there.
 After running I am given a usage error that request my SDI. I rerun, passing in my SDI(which in this case is omitted for obvious reasons):
@@ -235,7 +235,7 @@ $ /tmp/joemama/byte5 <sdi-not-written-because-at-some-point-this-may-be-public> 
 Here is your key: <not-written-for-the-same-reason>
 ```
 
-I was quite curious as to what this program was doing, so I also 'cat'-ed the byte5.c file.
+I was quite curious as to what this program was doing, so I also `cat`-ed the byte5.c file.
 Turns out I was lucky I passed sdiNNNNNNN instead of just NNNNNNN because otherwise the program would just exit with failure.
 There is also a check that there is an active ssh client in the current shell, which of course I am using otherwise I couldn't have connected.
 Finally, the result I was given is actually of the format:
@@ -313,7 +313,7 @@ Even though I use tars quite a lot I have never needed to do this before, so I h
 $ man tar
 ```
 
-shows that the -O option extracts contents to stdout which is exactly the same as 'unzip''s -p option.
+shows that the -O option extracts contents to stdout which is exactly the same as `unzip`'s -p option.
 With previous tar knowledge I can create the command.
 I need to e**x**tract to std**O**ut the contents of a g**z**ipped **f**ile called byte7.tar.gz.
 
@@ -356,7 +356,7 @@ There is absolutely nothing to see here. Move along.
 *PS: how do I exit??? I'm stuck*
 
 ## byte9
-After logging in and running 'ls' I see the following output:
+After logging in and running `ls` I see the following output:
 
 ```sh
 $ ls
@@ -405,7 +405,7 @@ By mistake I tried `rm ~ -r`. By the time I realised what I had done, it was alr
 I aliased rm to `gio trash` which moves stuff to a 'Trash' folder which I can restore the files from in a worst case scenario.
 
 ## byte10
-I log in and run 'la' to see all files in the home directory.
+I log in and run `la` to see all files in the home directory.
 
 ```sh
 $ la
@@ -415,7 +415,7 @@ $ la
 It seems we care about the 'names.txt' file. However there also seems to be an Easter egg in here. Let's leave that for later.  
 
 ### re:byte10
-We need to sort alphabetically and find the 10th name in the sorted file. For that we can use 'sort' with a combination of 'head' and 'tail':
+We need to sort alphabetically and find the 10th name in the sorted file. For that we can use `sort` with a combination of `head` and `tail`:
 
 ```sh
 $ sort names.txt | head -n 10 | tail -n 1
@@ -437,13 +437,13 @@ $ head -n 10 <file>
 ```
 
 returns the first 10 lines of a file(NOTE: that is the default behavior of head, but I like specifying it either way because I can never remember it).
-Using '|' turns the stdout of the previous command into the stdin of the new command. So head is just passed the sorted output as an input.
+Using `|` turns the stdout of the previous command into the stdin of the new command. So head is just passed the sorted output as an input.
 
 ```sh
 $ tail -n 1 <file>
 ```
 
-returns the last line of a file. Again using '|' turns the stdout of head into the input for tail. This way we get the last name in the first 10 alphabetically sorted names aka the 10th name alphabetically.
+returns the last line of a file. Again using `|` turns the stdout of head into the input for tail. This way we get the last name in the first 10 alphabetically sorted names aka the 10th name alphabetically.
 
 ### i_wonder_what_this_does
 
@@ -456,8 +456,8 @@ ninvaders? Alien invaders clone?
 After launching I spent enough time trying to win that I even found a cheat code.
 If you press capital H while playing, you can just add lives to yourself.
 
-# byte11
-Again, log in, run 'la':
+## byte11
+Again, log in, run `la`:
 
 ```sh
 $ la
@@ -471,7 +471,7 @@ $ sort births.txt
 ... spam ...
 ```
 
-sorts the names in alphabetical order. We need this because 'uniq' only works if equal lines are next to one another.
+sorts the names in alphabetical order. We need this because `uniq` only works if equal lines are next to one another.
 
 ```sh
 $ uniq -c <file>
@@ -486,7 +486,7 @@ Finally:
 $ sort -nr <file>
 ... spam ...
 ```
-sorts the lines in reverse numerical order. Again 'uniq -c' appends the count in the beginning of each line so we use that count to sort.
+sorts the lines in reverse numerical order. Again `uniq -c` appends the count in the beginning of each line so we use that count to sort.
 By default this would sort in ascending order. Instead by specifying -r it sorts in descending order.
 
 We could stop there or we could use 'head' to get a clean result. Thus the following giga-command is formed:
@@ -496,4 +496,3 @@ $ sort births.txt | uniq -c | sort -nr | head -n 1
     9 Kelley
 ```
 
-And with that, the final command line challenge is done
